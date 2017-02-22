@@ -90,9 +90,17 @@ RUN set -ex \
 		rootfs/bin/busybox \
 		rootfs/bin/getconf \
 		/lib/"$(gcc -print-multiarch)"/libnss*.so.* \
+# add by hetaixiang
+# add lib to support glibc
+		/lib/"$(gcc -print-multiarch)"/libpthread*.so.* \
+    /lib/"$(gcc -print-multiarch)"/libdl*.so.* \
+    /lib/"$(gcc -print-multiarch)"/libBrokenLocale*.so.* \
+    /lib/"$(gcc -print-multiarch)"/libcrypt*.so.* \
+    /lib/"$(gcc -print-multiarch)"/libcidn*.so.* \
+# end 2017-02-22
 	&& while [ "$#" -gt 0 ]; do \
 		f="$1"; shift; \
-		fn="$(basename "$f")"; \ 
+		fn="$(basename "$f")"; \
 		if [ -e "rootfs/lib/$fn" ]; then continue; fi; \
 		if [ "${f#rootfs/}" = "$f" ]; then \
 			if [ "${fn#ld-}" = "$fn" ]; then \
